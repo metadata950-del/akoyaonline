@@ -1,0 +1,42 @@
+backend:
+  name: github
+  repo: metadata950-del/akoyaonline
+  branch: main
+
+media_folder: "uploads"
+public_folder: "/uploads"
+locale: "en"
+
+collections:
+  - name: "store"
+    label: "Akoya Online"
+    files:
+      - name: "products"
+        label: "پروڈکٹس (Products)"
+        file: "data/products.json"
+        fields:
+          - label: "Products"
+            name: "products"
+            widget: "list"
+            summary: "{{fields.slot}} — {{fields.name}}"
+            fields:
+              - { label: "جگہ نمبر (Slot / فولڈر نمبر)", name: "slot", widget: "number", value_type: "int", min: 1, max: 60, hint: "یہی نمبر کارڈ کی جگہ طے کرتا ہے۔ 1 = اوپر دائیں۔ ہر پروڈکٹ کا نمبر الگ ہو۔" }
+              - { label: "نام", name: "name", widget: "string" }
+              - { label: "تفصیل (دو لائنیں)", name: "description", widget: "text", required: false }
+              - { label: "قیمت", name: "price", widget: "number", value_type: "int", min: 0, required: false }
+              - { label: "تصویر", name: "image", widget: "image", required: false }
+
+# ---- اختیاری: Sveltia کا اپنا تصویر چھوٹا کرنے کا نظام ----
+# ابھی بند ہے کیونکہ image-resize.js پہلے ہی تصویر 800x800 اور 200KB سے کم کر دیتی ہے۔
+# اگر image-resize.js کام نہ کرے تو نیچے کی لائنوں سے # ہٹا کر آزمائیں:
+#
+# media_libraries:
+#   default:
+#     config:
+#       max_file_size: 512000
+#       transformations:
+#         raster_image:
+#           format: webp
+#           quality: 80
+#           width: 800
+#           height: 800

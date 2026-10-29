@@ -1,0 +1,15 @@
+# Netlify settings for Akoya Online (static site, no build step)
+[build]
+  publish = "."
+
+# پروڈکٹ کا متن/تصویر بدلنے پر نیا ورژن فوراً نظر آئے
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"

@@ -1,0 +1,159 @@
+{
+  "products": [
+    {
+      "slot": 1,
+      "name": "بچوں کے ویلکرو جوتے",
+      "description": "نرم بھورے رنگ کے بچوں کے جوتے، ویلکرو پٹیوں کے ساتھ۔",
+      "price": 49,
+      "image": "/uploads/01.jpg"
+    },
+    {
+      "slot": 2,
+      "name": "پھولوں والا گولڈن دو تہہ ہار",
+      "description": "سنہری رنگ کا دو تہہ ہار، چھوٹے پھولوں کے لٹکنوں کے ساتھ۔",
+      "price": 89,
+      "image": "/uploads/02.jpg"
+    },
+    {
+      "slot": 3,
+      "name": "گولڈن بارڈر والا چائے کا کپ سیٹ",
+      "description": "سفید چینی کا کپ اور پرچ، سنہری کناروں کے ساتھ۔",
+      "price": 75,
+      "image": "/uploads/03.jpg"
+    },
+    {
+      "slot": 4,
+      "name": "نقش و نگار والا چائے کا گلاس",
+      "description": "سنہری ہینڈل اور خوبصورت نقش والا شیشے کا گلاس، پرچ کے ساتھ۔",
+      "price": 55,
+      "image": "/uploads/04.jpg"
+    },
+    {
+      "slot": 5,
+      "name": "پھولوں کے ڈیزائن والا فیروزی مگ",
+      "description": "فیروزی رنگ کا مگ جس پر ہاتھ سے بنے پھولوں کا ڈیزائن ہے۔",
+      "price": 45,
+      "image": "/uploads/05.webp"
+    },
+    {
+      "slot": 6,
+      "name": "کاٹن پھولدار بیڈ شیٹ سیٹ، کنگ",
+      "description": "",
+      "price": 189
+    },
+    {
+      "slot": 7,
+      "name": "ساٹن بیڈ شیٹ، کوئین",
+      "description": "",
+      "price": 159
+    },
+    {
+      "slot": 8,
+      "name": "بچوں کی کارٹون بیڈ شیٹ، سنگل",
+      "description": "",
+      "price": 99
+    },
+    {
+      "slot": 9,
+      "name": "نرم تکیے، جوڑا",
+      "description": "",
+      "price": 69
+    },
+    {
+      "slot": 10,
+      "name": "کلاسک لیدر اسٹریپ گھڑی",
+      "description": "",
+      "price": 210
+    },
+    {
+      "slot": 11,
+      "name": "روز گولڈ لیڈیز گھڑی",
+      "description": "",
+      "price": 180
+    },
+    {
+      "slot": 12,
+      "name": "ڈیجیٹل اسپورٹس گھڑی",
+      "description": "",
+      "price": 120
+    },
+    {
+      "slot": 13,
+      "name": "بچوں کی روشنی والی گھڑی",
+      "description": "",
+      "price": 59
+    },
+    {
+      "slot": 14,
+      "name": "نرم ٹیڈی بیئر",
+      "description": "",
+      "price": 49
+    },
+    {
+      "slot": 15,
+      "name": "لکڑی کے بلڈنگ بلاکس",
+      "description": "",
+      "price": 75
+    },
+    {
+      "slot": 16,
+      "name": "ریموٹ کنٹرول کار",
+      "description": "",
+      "price": 119
+    },
+    {
+      "slot": 17,
+      "name": "پل بیک گاڑیوں کا سیٹ",
+      "description": "",
+      "price": 39
+    },
+    {
+      "slot": 18,
+      "name": "سرپرائز گفٹ باکس",
+      "description": "",
+      "price": 99
+    },
+    {
+      "slot": 19,
+      "name": "خوشبو دار موم بتی کا جار",
+      "description": "",
+      "price": 45
+    },
+    {
+      "slot": 20,
+      "name": "پرنٹڈ مگ",
+      "description": "",
+      "price": 35
+    },
+    {
+      "slot": 21,
+      "name": "گفٹ ہیمپر باسکٹ",
+      "description": "",
+      "price": 149
+    },
+    {
+      "slot": 22,
+      "name": "سلور کڑا بریسلیٹ",
+      "description": "",
+      "price": 68
+    },
+    {
+      "slot": 23,
+      "name": "مردانہ اسٹیل گھڑی",
+      "description": "",
+      "price": 195
+    },
+    {
+      "slot": 24,
+      "name": "رنگین پزل سیٹ",
+      "description": "",
+      "price": 55
+    },
+    {
+      "slot": 25,
+      "name": "خوبصورت گفٹ پیک",
+      "description": "",
+      "price": 85
+    }
+  ]
+}
