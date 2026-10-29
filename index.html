@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}html,body{margin:0}body{min-height:100vh}</style>
+<meta name="theme-color" content="#B0245B">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Akoya Online">
+<title>Akoya Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Layout: sticky header, short left-aligned hero with an art cluster, category chips, product grid, cart panel on the right */
+  :root{
+    --bg:#FAF7FC; --surface:#FFFFFF; --ink:#22142E; --soft:#6B5B7B; --line:#E7DEEE;
+    --accent:#B0245B; --on-accent:#FFFFFF; --gold:#C8962B; --wa:#128C4A; --on-wa:#FFFFFF;
+    --t0:#F9DCE6; --t1:#E3DDF7; --t2:#DDEFE7; --t3:#FBE9C8; --t4:#D9E8F8;
+    --shadow:0 1px 2px rgba(34,20,46,.06), 0 8px 24px rgba(34,20,46,.07);
+    --display:'Noto Sans Arabic', 'Segoe UI', Tahoma, system-ui, sans-serif;
+    --body:'Noto Sans Arabic', 'Segoe UI', Tahoma, system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#160E1D; --surface:#21152D; --ink:#F4EDF8; --soft:#B9A9C8; --line:#3A2A49;
+      --accent:#F26C98; --on-accent:#2B0D1A; --gold:#E3B54D; --wa:#2BB673; --on-wa:#06240F;
+      --t0:#4A2536; --t1:#33294F; --t2:#223C34; --t3:#4B3A1B; --t4:#243A55;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#160E1D; --surface:#21152D; --ink:#F4EDF8; --soft:#B9A9C8; --line:#3A2A49;
+    --accent:#F26C98; --on-accent:#2B0D1A; --gold:#E3B54D; --wa:#2BB673; --on-wa:#06240F;
+    --t0:#4A2536; --t1:#33294F; --t2:#223C34; --t3:#4B3A1B; --t4:#243A55;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+  *{ box-sizing:border-box; }
+  [hidden]{ display:none !important; }
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.75;
+    padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+    padding-block:0 0;
+  }
+  body::before{ content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:30; background:var(--accent); }
+  button, input, textarea{ font-family:inherit; font-size:inherit; color:inherit; }
+  button{ cursor:pointer; }
+  :focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+  .wrap{ max-width:1120px; margin:0 auto; }
+
+  /* header */
+  .top{ position:sticky; top:env(safe-area-inset-top, 0px); z-index:20; background:var(--accent); border-bottom:none;
+    margin-left:calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+    padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }
+  .top .wrap{ position:relative; display:flex; align-items:center; justify-content:center; padding:24px 14px 12px; }
+  .logo{ font-family:var(--display); font-weight:800; line-height:1.4; flex:1; min-width:0; text-align:center; padding-inline:0; }
+  .logo .ttl{ display:flex; justify-content:space-between; align-items:center; gap:8px; direction:ltr; white-space:nowrap; font-size:clamp(17px, 5vw, 40px); line-height:1.5; }
+  .logo .lg{ width:clamp(36px, 10vw, 48px); height:clamp(36px, 10vw, 48px); border-radius:50%; overflow:hidden; display:block; box-shadow:0 0 0 1.5px rgba(255,255,255,.9); }
+  .logo .lg img{ width:100%; height:100%; object-fit:cover; transform:scale(1.07); display:block; }
+  .logo .ttl .ur{ direction:rtl; }
+  .logo .addr{ display:block; text-wrap:balance; font-family:var(--body); font-weight:500; font-size:clamp(11px, 3vw, 13px); color:#FFFFFF; line-height:1.6; }
+  .logo{ color:#FFFFFF; }
+  .logo .yel{ color:#FFD84D; }
+  .logo small{ display:block; font-family:var(--body); font-weight:600; font-size:clamp(12px, 3.4vw, 15px); color:#FFFFFF; }
+  .top .cart-btn{ position:absolute; inset-inline-end:0; top:50%; transform:translateY(-50%); }
+  
+  .cart-btn{ position:relative; display:inline-flex; align-items:center; gap:8px; border:1.5px solid var(--ink); background:transparent; border-radius:999px; padding:9px 16px; font-weight:600; }
+  .cart-btn .n{ min-width:22px; height:22px; border-radius:999px; background:var(--accent); color:var(--on-accent); font-size:13px; display:inline-grid; place-items:center; padding:0 6px; }
+
+  /* hero */
+  .hero{ padding:4px 0 4px; text-align:center; }
+  .hero h1{ font-family:var(--display); font-weight:800; font-size:clamp(30px, 5.4vw, 50px); line-height:1.35; margin:0 0 12px; text-wrap:balance; }
+  .hero h1 em{ font-style:normal; color:var(--accent); }
+  .hero p{ text-align:center; margin:0 auto; color:var(--accent); font-weight:700; max-width:none; font-size:clamp(15px, 4.2vw, 19px); line-height:1.6; }
+  .hero-actions{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:999px; padding:12px 20px; font-weight:700; text-decoration:none; }
+  .btn-wa{ background:var(--wa); color:var(--on-wa); }
+  .btn-ghost{ background:transparent; border:1.5px solid var(--line); color:var(--ink); }
+  .cluster{ position:relative; height:240px; min-width:0; }
+  .cluster .tile{ position:absolute; width:46%; aspect-ratio:1; border-radius:28px; box-shadow:var(--shadow); overflow:hidden; }
+  .cluster .tile svg{ width:100%; height:100%; padding:14%; }
+  .cluster .tile:nth-child(1){ left:2%; top:10%; background:var(--t0); transform:rotate(-5deg); }
+  .cluster .tile:nth-child(2){ right:2%; top:0; background:var(--t3); transform:rotate(4deg); }
+  .cluster .tile:nth-child(3){ left:28%; bottom:0; background:var(--t1); transform:rotate(-1deg); }
+
+  /* toolbar */
+  .tools{ display:flex; flex-direction:column; gap:12px; padding:12px 0 8px; }
+  .search{ position:relative; }
+  .search input{ width:100%; border:1.5px solid var(--line); background:var(--surface); border-radius:999px; padding:12px 18px 12px 44px; outline:none; -webkit-appearance:none; appearance:none; }
+  .search input:focus{ border-color:var(--accent); }
+  .search button{ position:absolute; inset-inline-end:8px; top:50%; transform:translateY(-50%); border:none; background:transparent; color:var(--soft); font-size:18px; padding:6px 10px; }
+  .chips{ display:flex; gap:8px; overflow-x:auto; padding:2px 0 6px; scrollbar-width:thin; }
+  .chip{ flex:0 0 auto; white-space:nowrap; border:1.5px solid var(--line); background:var(--surface); border-radius:999px; padding:8px 16px; font-weight:600; }
+  .chip[aria-pressed="true"]{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
+    .meta{ color:var(--soft); font-size:14px; padding:8px 0 4px; }
+
+  /* products */
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap:14px; padding:8px 0 24px; }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:20px; overflow:hidden; display:flex; flex-direction:column; min-width:0; }
+  .card{ position:relative; }
+  .slot{ min-width:0; }
+  .art{ aspect-ratio:1; display:grid; place-items:center; }
+  .art svg{ width:78%; height:78%; }
+  .art{ position:relative; overflow:hidden; border-radius:20px; }
+  .art .pimg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .art .pimg{ cursor:zoom-in; }
+  .lb{ touch-action:none; position:fixed; inset:0; z-index:100; background:#0a050f; display:flex; align-items:center; justify-content:center; padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px); }
+  .lb img{ transform-origin:center center; will-change:transform; user-select:none; -webkit-user-drag:none; max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; }
+  .lb .lbx{ position:absolute; top:calc(12px + env(safe-area-inset-top,0px)); inset-inline-end:12px; width:44px; height:44px; border:none; border-radius:50%; background:rgba(255,255,255,.18); color:#fff; font-size:22px; line-height:1; }
+  .lb .lbn{ position:absolute; left:0; right:0; bottom:calc(14px + env(safe-area-inset-bottom,0px)); text-align:center; color:#fff; font-weight:600; padding:0 16px; text-shadow:0 1px 4px rgba(0,0,0,.7); pointer-events:none; }
+  .desc{ color:var(--soft); font-size:16px; text-align:center; line-height:24px; height:48px; display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .info{ padding:12px 14px 14px; display:flex; flex-direction:column; gap:0; flex:1; }   /* row1 نام | row2-3 تفصیل | row4 قیمت */
+  .name{ height:24px; font-weight:700; font-size:16px; text-align:center; line-height:24px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .price{ font-family:var(--display); font-weight:800; font-size:16px; height:24px; line-height:24px; font-variant-numeric:tabular-nums; direction:ltr; text-align:center; white-space:nowrap; }
+
+  .add{ display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; text-align:center; margin-top:8px; border:none; background:var(--wa) !important; color:var(--on-wa) !important; background:var(--accent); color:var(--on-accent); border-radius:12px; padding:10px; font-weight:700; width:100%; }
+  .step{ margin-top:8px; display:flex; align-items:center; justify-content:space-between; border:1.5px solid var(--accent); border-radius:12px; overflow:hidden; }
+  .step button{ border:none; background:transparent; width:44px; height:40px; font-size:20px; font-weight:700; color:var(--accent); }
+  .step b{ font-variant-numeric:tabular-nums; }
+  .empty{ grid-column:1 / -1; text-align:left; color:var(--soft); padding:32px 0; }
+
+  /* ایپ انسٹال کریں بار (صرف موبائل براؤزر میں) */
+  .inst{ display:none; position:fixed; left:0; right:0; bottom:0; z-index:90; background:var(--accent); color:#fff;
+    padding:10px max(14px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px, env(safe-area-inset-left,0px));
+    box-shadow:0 -4px 18px rgba(0,0,0,.22); align-items:center; gap:10px; }
+  .inst.show{ display:flex; }
+  .inst .ib{ flex:1; border:none; border-radius:12px; background:#FFD84D; color:#22142E; font-weight:800; font-size:17px; padding:11px 14px; }
+  .inst .ix{ flex:0 0 auto; width:40px; height:40px; border:none; border-radius:50%; background:rgba(255,255,255,.2); color:#fff; font-size:18px; line-height:1; }
+  .inst .ih{ flex:1; font-size:14.5px; line-height:1.7; }
+  body.has-inst{ padding-bottom:72px; }
+  @media (min-width:761px){ .inst{ display:none !important; } body.has-inst{ padding-bottom:0; } }
+
+  /* footer */
+  .foot{ background:var(--accent); color:#FFFFFF; margin-top:24px;
+    margin-left:calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+    padding:18px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+  .foot .copy{ direction:ltr; unicode-bidi:isolate; text-align:center; font-size:14px; }
+  .foot .copy a{ color:#FFFFFF; font-weight:700; text-decoration:none; }
+
+  /* sticky cart bar (phones) */
+  .bar{ position:fixed; left:0; right:0; bottom:0; z-index:25; padding:10px max(16px, env(safe-area-inset-left, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); background:linear-gradient(to top, var(--bg) 70%, transparent); }
+  .bar .btn{ width:100%; max-width:520px; margin:0 auto; display:flex; background:var(--accent); color:var(--on-accent); box-shadow:var(--shadow); justify-content:space-between; }
+
+  /* cart panel */
+  .scrim{ position:fixed; inset:0; z-index:40; background:rgba(15,8,22,.5); }
+  .panel{ position:fixed; z-index:50; top:0; inset-inline-end:0; bottom:0; width:min(440px, 100%); background:var(--bg); display:flex; flex-direction:column;
+    padding-top:env(safe-area-inset-top, 0px); padding-bottom:env(safe-area-inset-bottom, 0px); box-shadow:0 0 40px rgba(0,0,0,.3); }
+  .panel header{ display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--line); }
+  .panel h2{ font-family:var(--display); font-weight:800; font-size:24px; margin:0; line-height:1.5; }
+  .x{ border:none; background:transparent; font-size:26px; line-height:1; padding:6px 10px; color:var(--soft); }
+  .lines{ flex:1; overflow-y:auto; padding:8px 18px; }
+  .line{ display:grid; grid-template-columns:56px 1fr auto; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid var(--line); }
+  .line .mini{ width:56px; height:56px; border-radius:14px; display:grid; place-items:center; }
+  .line .mini svg{ width:80%; height:80%; }
+  .line .t{ font-weight:600; line-height:1.55; min-width:0; }
+  .line .u{ color:var(--soft); font-size:13px; }
+  .line .step{ margin:0; border-radius:10px; }
+  .line .step button{ width:36px; height:34px; }
+  .line .step b{ min-width:20px; text-align:center; }
+  .line .sum{ text-align:end; font-weight:700; font-variant-numeric:tabular-nums; }
+  .line .r{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+  .none{ color:var(--soft); padding:28px 0; }
+  .checkout{ padding:14px 18px 18px; border-top:1px solid var(--line); background:var(--surface); display:grid; gap:10px; }
+  .checkout label{ font-size:14px; font-weight:600; color:var(--soft); display:grid; gap:4px; }
+  .checkout input, .checkout textarea{ width:100%; border:1.5px solid var(--line); background:var(--bg); border-radius:12px; padding:10px 12px; outline:none; resize:vertical; }
+  .checkout input:focus, .checkout textarea:focus{ border-color:var(--accent); }
+  .total{ display:flex; justify-content:space-between; align-items:baseline; font-weight:700; }
+  .total b{ font-family:var(--display); font-size:26px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .btn-wa[aria-disabled="true"]{ opacity:.45; pointer-events:none; }
+  .hint{ font-size:13.5px; color:var(--soft); margin:0; line-height:1.7; }
+
+  @media (max-width:760px){
+    .hero{ grid-template-columns:1fr; padding-top:4px; }
+    .cluster{ height:170px; order:-1; }
+    .cluster .tile{ width:34%; }
+    .cluster .tile:nth-child(3){ left:33%; }
+    .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; }
+    .info{ padding:10px 12px 12px; }
+    .cart-btn .lbl{ display:none; }
+  }
+  @media (min-width:761px){ .bar{ display:none !important; } }
+  @media (prefers-reduced-motion: reduce){ *{ scroll-behavior:auto !important; transition:none !important; } }
+</style>
+
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <div class="logo"><span class="ttl"><span class="en"><span class="yel">Akoya</span> Online</span><span class="lg"><img src="logo.png" alt="Akoya" width="48" height="48"></span><span class="ur"><span class="yel">اکویا</span> آن لائن</span></span><span class="addr" dir="ltr">Wockland Homes, Ali Town, Raiwind Road, Lahore, Pakistan</span></div>
+</div></div>
+
+<main class="wrap">
+  <section class="hero">
+    <p>فری ہوم ڈیلیوری آل پاکستان</p>
+  </section>
+
+  <section id="shop" aria-label="مصنوعات">
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<div class="lb" id="lb" hidden><button class="lbx" id="lbx" type="button" aria-label="بند کریں">✕</button><img id="lbi" alt="" draggable="false"><div class="lbn" id="lbn"></div></div>
+
+<div class="inst" id="inst" role="region" aria-label="ایپ انسٹال کریں"><button class="ib" id="instBtn" type="button">ایپ انسٹال کریں</button><button class="ix" id="instX" type="button" aria-label="بند کریں">✕</button></div>
+
+<footer class="foot">
+  <div class="copy"><a href="https://www.akoyanexus.uk" target="_blank" rel="noopener">www.akoyanexus.uk</a> - All rights reserved</div>
+</footer>
+
+<script>
+(function(){
+  // ---- Store settings: change these to edit the shop ----
+  var PHONE = '923297748360';            // WhatsApp number, digits only
+  var CUR = 'روپے';
+  var CATS = [
+    { id:'jewellery', label:'زیورات' },
+    { id:'bedsheets', label:'بیڈ شیٹس' },
+    { id:'watches',   label:'گھڑیاں' },
+    { id:'toys',      label:'کھلونے' },
+    { id:'gifts',     label:'گفٹ آئٹمز' }
+  ];
+  // kind = which drawing to show, t = background tint (0-4). Prices are sample prices.
+  var PRODUCTS = [];
+  var MAX_FOLDERS = 60;      // products/01 ... products/60 تک دیکھے گا
+
+  // ---- products/NN/info.txt پڑھنا ----
+  function digits(str){ return String(str).replace(/[\u06F0-\u06F9]/g, function(c){ return c.charCodeAt(0) - 0x06F0; }).replace(/[\u0660-\u0669]/g, function(c){ return c.charCodeAt(0) - 0x0660; }); }
+  function parseInfo(txt){
+    var o = { name:'', price:0, description:'', kind:'' }, mode = '';
+    txt.replace(/^\uFEFF/, '').split(/\r?\n/).forEach(function(line){
+      var m = line.match(/^\s*([^:\uFF1A]+?)\s*[:\uFF1A]\s*(.*)$/), k = m ? m[1].trim().toLowerCase() : '', v = m ? m[2].trim() : '';
+      if (k === 'نام' || k === 'name'){ o.name = v; mode = ''; }
+      else if (k === 'قیمت' || k === 'price'){ o.price = parseFloat(digits(v).replace(/[^0-9.]/g, '')) || 0; mode = ''; }
+      else if (k === 'تفصیل' || k === 'description'){ o.description = v; mode = 'd'; }
+      else if (k === 'ڈرائنگ' || k === 'drawing'){ o.kind = v; mode = ''; }
+      else if (mode === 'd' && line.trim()){ o.description += (o.description ? '\n' : '') + line.trim(); }
+    });
+    return o;
+  }
+  function loadProducts(){
+    var jobs = [];
+    for (var i = 1; i <= MAX_FOLDERS; i++){
+      (function(n){
+        var dir = 'products/' + (n < 10 ? '0' : '') + n;
+        jobs.push(fetch(dir + '/info.txt').then(function(r){ return r.ok ? r.arrayBuffer() : null; }).then(function(buf){
+          if (!buf) return null;
+          var txt = new TextDecoder('utf-8').decode(buf);
+          if (/^\s*<(!doctype|html)/i.test(txt)) return null;     // فولڈر موجود نہیں
+          var o = parseInfo(txt); o.dir = dir; return o.name ? o : null;
+        }).catch(function(){ return null; }));
+      })(i);
+    }
+    return Promise.all(jobs).then(function(list){ PRODUCTS = list; PRODUCTS.loaded = true; });   // فولڈر نمبر = جگہ؛ خالی فولڈر کی جگہ خالی رہتی ہے
+  }
+  var EXTS = ['jpg', 'png', 'webp', 'jpeg'];
+
+  // ---- Drawings (simple line art, colours come from the theme) ----
+  var S = 'fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+  var ART = {
+    ring:'<circle cx="50" cy="62" r="22" '+S+' stroke-width="6"/><path d="M50 22l11 12-11 14-11-14z" fill="var(--accent)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>',
+    necklace:'<path d="M16 22Q50 96 84 22" '+S+'/><circle cx="50" cy="68" r="9" fill="var(--gold)" stroke="var(--ink)" stroke-width="3"/><circle cx="50" cy="68" r="3" fill="var(--ink)"/>',
+    earrings:'<g '+S+'><circle cx="32" cy="22" r="4"/><path d="M32 26v14"/><path d="M32 40l-9 12 9 16 9-16z" fill="var(--accent)"/><circle cx="68" cy="22" r="4"/><path d="M68 26v14"/><path d="M68 40l-9 12 9 16 9-16z" fill="var(--accent)"/></g>',
+    bracelet:'<ellipse cx="50" cy="52" rx="32" ry="20" '+S+' stroke-width="6"/><circle cx="22" cy="58" r="5" fill="var(--gold)" stroke="var(--ink)" stroke-width="2.5"/><circle cx="50" cy="73" r="5" fill="var(--accent)" stroke="var(--ink)" stroke-width="2.5"/><circle cx="78" cy="58" r="5" fill="var(--gold)" stroke="var(--ink)" stroke-width="2.5"/>',
+    watch:'<g '+S+'><path d="M40 8h20l3 22H37zM37 70h26l-3 22H40z" fill="var(--accent)"/><circle cx="50" cy="50" r="24" fill="var(--surface)"/><path d="M50 50V34M50 50l11 6"/></g><circle cx="50" cy="50" r="2.5" fill="var(--ink)"/>',
+    bed:'<g '+S+'><rect x="10" y="30" width="7" height="52" rx="2"/><rect x="17" y="54" width="73" height="18" rx="4" fill="var(--accent)"/><rect x="22" y="40" width="26" height="14" rx="6" fill="var(--surface)"/><path d="M17 72v10M90 72v10"/><path d="M58 54v18M70 54v18M82 54v18" stroke-width="2"/></g>',
+    pillow:'<g '+S+'><rect x="14" y="30" width="72" height="42" rx="16" fill="var(--surface)"/><path d="M26 44q24 10 48 0" stroke-width="2.5"/></g>',
+    teddy:'<g '+S+'><circle cx="33" cy="26" r="9" fill="var(--gold)"/><circle cx="67" cy="26" r="9" fill="var(--gold)"/><circle cx="50" cy="40" r="19" fill="var(--gold)"/><ellipse cx="50" cy="76" rx="22" ry="18" fill="var(--gold)"/><circle cx="50" cy="45" r="7" fill="var(--surface)"/></g><circle cx="43" cy="37" r="2.5" fill="var(--ink)"/><circle cx="57" cy="37" r="2.5" fill="var(--ink)"/><circle cx="50" cy="43" r="2.5" fill="var(--ink)"/>',
+    blocks:'<g '+S+'><rect x="16" y="56" width="32" height="32" rx="4" fill="var(--accent)"/><rect x="52" y="56" width="32" height="32" rx="4" fill="var(--gold)"/><rect x="34" y="22" width="32" height="32" rx="4" fill="var(--surface)"/></g>',
+    car:'<g '+S+'><path d="M10 66v-10q0-6 7-8l12-3 10-14h24l12 14 8 3q6 2 6 8v10z" fill="var(--accent)"/><path d="M34 45l8-10h16l8 10z" fill="var(--surface)"/><circle cx="30" cy="68" r="9" fill="var(--surface)"/><circle cx="72" cy="68" r="9" fill="var(--surface)"/></g>',
+    gift:'<g '+S+'><rect x="16" y="42" width="68" height="44" rx="4" fill="var(--surface)"/><rect x="12" y="30" width="76" height="14" rx="4" fill="var(--accent)"/><path d="M50 30v56" stroke-width="7" stroke="var(--gold)"/><path d="M50 30c-8-16-24-10-18-2 3 4 12 2 18 2zM50 30c8-16 24-10 18-2-3 4-12 2-18 2z" fill="var(--gold)"/></g>',
+    candle:'<g '+S+'><rect x="30" y="46" width="40" height="40" rx="6" fill="var(--surface)"/><path d="M50 14q12 14 0 26-12-12 0-26z" fill="var(--gold)"/><path d="M50 40v6"/><path d="M38 62h24" stroke-width="2.5"/></g>',
+    mug:'<g '+S+'><path d="M22 38h46v34q0 12-12 12H34q-12 0-12-12z" fill="var(--surface)"/><path d="M68 46h6q10 0 10 11t-10 11h-6"/><path d="M34 14q-5 7 0 12M46 14q-5 7 0 12M58 14q-5 7 0 12" stroke-width="2.5"/><path d="M34 56l6 8 8-12 8 12" stroke="var(--accent)" stroke-width="3"/></g>'
+  };
+  function art(kind){ return '<svg viewBox="0 0 100 100" role="img" aria-hidden="true">' + (ART[kind] || ART.gift) + '</svg>'; }
+
+  // ---- State ----
+  var $ = function(id){ return document.getElementById(id); };
+  function money(n){ return n.toLocaleString('en-US') + ' ' + CUR; }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function waLink(text){ return 'https://wa.me/' + PHONE + (text ? '?text=' + encodeURIComponent(text) : ''); }
+  function orderLink(p){ return waLink('السلام علیکم! میں یہ آرڈر کرنا چاہتا/چاہتی ہوں:\n' + p.name + (p.price > 0 ? '\nقیمت: ' + money(p.price) : '')); }
+
+  // ---- Products ----
+  var ROWS_DESKTOP = 5, ROWS_MOBILE = 10;   // rows shown on laptop / phone
+  function renderGrid(){
+    var cols = getComputedStyle($('grid')).gridTemplateColumns.split(' ').filter(Boolean).length || 2;
+    var rows = window.matchMedia('(max-width:760px)').matches ? ROWS_MOBILE : ROWS_DESKTOP;
+    var last = 0; PRODUCTS.forEach(function(p, k){ if (p) last = k + 1; });   // آخری موجود فولڈر
+    var limit = Math.min(cols * rows, Math.floor(last / cols) * cols);   // only complete rows
+    var key = cols + '|' + limit + '|' + PRODUCTS.length + '|' + (PRODUCTS.loaded ? 1 : 0);
+    if (key === renderGrid.key) return; renderGrid.key = key;
+    $('grid').innerHTML = PRODUCTS.slice(0, limit).map(function(p, i){
+      if (!p) return '<div class="slot" aria-hidden="true"></div>';
+      var link = orderLink(p), tint = (p.t != null ? p.t : i % 5), kind = p.kind || 'gift';
+      var pic = '<img class="pimg" src="'+esc(p.dir)+'/photo.'+EXTS[0]+'" alt="'+esc(p.name)+'" loading="lazy" data-dir="'+esc(p.dir)+'" data-i="0" data-kind="'+esc(kind)+'">';
+      return '<article class="card"><div class="art" style="background:var(--t'+tint+')">'+pic+'</div>'
+        + '<div class="info"><div class="name">'+esc(p.name)+'</div>'
+        + '<div class="desc">'+(p.description ? esc(p.description) : '&nbsp;')+'</div>'
+        + '<div class="price">'+(p.price > 0 ? 'قیمت : '+Number(p.price).toLocaleString('en-US')+' '+CUR : '&nbsp;')+'</div>'
+        + '<a class="add" target="_blank" rel="noopener" href="'+link+'"><svg class="waic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span>آرڈر کریں</span></a></div></article>';
+    }).join('');
+  }
+
+  // photo.jpg نہ ملے تو photo.png، photo.webp، photo.jpeg آزمائے گا، آخر میں ڈرائنگ دکھائے گا
+  document.addEventListener('error', function(e){
+    var el = e.target;
+    if (el && el.tagName === 'IMG' && el.classList.contains('pimg')){
+      var i = (parseInt(el.getAttribute('data-i'), 10) || 0) + 1;
+      if (i < EXTS.length){ el.setAttribute('data-i', i); el.src = el.getAttribute('data-dir') + '/photo.' + EXTS[i]; }
+      else { el.remove(); }   // تصویر نہ ہو تو جگہ خالی رہے گی
+    }
+  }, true);
+
+  // ---- تصویر پر ٹچ کرنے سے پوری اسکرین پر کھلے (دو انگلیوں سے زوم، ڈبل ٹیپ، گھسیٹنا) ----
+  var Z = { s:1, x:0, y:0 }, lbTimer = null, gestured = 0, dblAt = 0, lastTap = 0, pin = null, pan = null, moved = false;
+  function applyZ(){ $('lbi').style.transform = 'translate(' + Z.x + 'px,' + Z.y + 'px) scale(' + Z.s + ')'; }
+  function resetZ(){ Z = { s:1, x:0, y:0 }; applyZ(); }
+  function clampZ(){
+    var im = $('lbi'), W = $('lb').clientWidth, H = $('lb').clientHeight;
+    var mx = Math.max(0, (im.offsetWidth * Z.s - W) / 2), my = Math.max(0, (im.offsetHeight * Z.s - H) / 2);
+    Z.x = Math.min(mx, Math.max(-mx, Z.x)); Z.y = Math.min(my, Math.max(-my, Z.y));
+  }
+  function rel(p){ var r = $('lb').getBoundingClientRect(); return { x: p.clientX - r.left - r.width / 2, y: p.clientY - r.top - r.height / 2 }; }
+  function zoomAt(ns, c){
+    ns = Math.min(5, Math.max(1, ns)); var k = ns / Z.s;
+    Z.x = c.x - (c.x - Z.x) * k; Z.y = c.y - (c.y - Z.y) * k; Z.s = ns;
+    if (ns <= 1.001){ Z.s = 1; Z.x = 0; Z.y = 0; }
+    clampZ(); applyZ();
+  }
+  function toggleZoom(c){ zoomAt(Z.s > 1.05 ? 1 : 2.5, c); }
+  function openPic(img){
+    resetZ(); $('lbi').src = img.currentSrc || img.src; $('lbi').alt = img.alt || ''; $('lbn').textContent = img.alt || '';
+    $('lb').hidden = false; document.body.style.overflow = 'hidden';
+  }
+  function closePic(){ clearTimeout(lbTimer); $('lb').hidden = true; $('lbi').removeAttribute('src'); document.body.style.overflow = ''; resetZ(); }
+  function dist(t){ return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY); }
+  function mid(t){ return rel({ clientX: (t[0].clientX + t[1].clientX) / 2, clientY: (t[0].clientY + t[1].clientY) / 2 }); }
+
+  document.addEventListener('click', function(e){
+    var el = e.target;
+    if (el && el.tagName === 'IMG' && el.classList.contains('pimg')){ openPic(el); }
+  });
+  $('lbx').addEventListener('click', function(e){ e.stopPropagation(); closePic(); });
+  $('lb').addEventListener('click', function(){
+    var now = Date.now();
+    if (now - gestured < 400 || now - dblAt < 400 || Z.s > 1.01) return;   // زوم یا گھسیٹنے کے بعد بند نہ ہو
+    clearTimeout(lbTimer); lbTimer = setTimeout(closePic, 260);             // ایک ٹیپ: بند
+  });
+  $('lb').addEventListener('dblclick', function(e){ if (Date.now() - dblAt < 600) return; dblAt = Date.now(); clearTimeout(lbTimer); toggleZoom(rel(e)); });   // ماؤس کے لیے
+  $('lb').addEventListener('wheel', function(e){ e.preventDefault(); zoomAt(Z.s * (e.deltaY < 0 ? 1.15 : 1 / 1.15), rel(e)); }, { passive:false });
+
+  $('lb').addEventListener('touchstart', function(e){
+    var t = e.touches; moved = false;
+    if (t.length === 2){ var m = mid(t); pin = { d: dist(t), s: Z.s, px: (m.x - Z.x) / Z.s, py: (m.y - Z.y) / Z.s }; pan = null; }
+    else if (t.length === 1){ pan = { sx: t[0].clientX, sy: t[0].clientY, x: Z.x, y: Z.y }; pin = null; }
+  }, { passive:true });
+  $('lb').addEventListener('touchmove', function(e){
+    var t = e.touches;
+    if (t.length === 2 && pin){
+      e.preventDefault(); moved = true;
+      var m = mid(t), ns = Math.min(5, Math.max(1, pin.s * dist(t) / pin.d));
+      Z.s = ns; Z.x = m.x - pin.px * ns; Z.y = m.y - pin.py * ns;
+      if (ns <= 1.001){ Z.s = 1; Z.x = 0; Z.y = 0; }
+      clampZ(); applyZ();
+    } else if (t.length === 1 && pan && Z.s > 1.01){
+      e.preventDefault();
+      var dx = t[0].clientX - pan.sx, dy = t[0].clientY - pan.sy;
+      if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+      Z.x = pan.x + dx; Z.y = pan.y + dy; clampZ(); applyZ();
+    }
+  }, { passive:false });
+  $('lb').addEventListener('touchend', function(e){
+    if (e.touches.length === 1){ pin = null; pan = { sx: e.touches[0].clientX, sy: e.touches[0].clientY, x: Z.x, y: Z.y }; moved = true; }
+    if (e.touches.length > 0) return;
+    pin = null; pan = null;
+    var now = Date.now();
+    if (moved){ gestured = now; lastTap = 0; return; }
+    var p = e.changedTouches[0];
+    if (now - lastTap < 300){                       // ڈبل ٹیپ: زوم اِن / آؤٹ
+      lastTap = 0; dblAt = now; clearTimeout(lbTimer); toggleZoom(rel(p));
+    } else { lastTap = now; }
+  }, { passive:true });
+
+  window.addEventListener('resize', function(){ if (PRODUCTS.loaded) renderGrid(); });
+
+
+  // ---- ایپ انسٹال کریں ----
+  var deferred = null;
+  var isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var INST_KEY = 'anaya_install_dismissed';
+  function instDismissed(){ try{ return Date.now() - (parseInt(localStorage.getItem(INST_KEY), 10) || 0) < 3 * 86400000; }catch(e){ return false; } }
+  function showInst(){
+    if (isStandalone || instDismissed() || !window.matchMedia('(max-width:760px)').matches) return;
+    $('inst').classList.add('show'); document.body.classList.add('has-inst');
+  }
+  function hideInst(remember){
+    $('inst').classList.remove('show'); document.body.classList.remove('has-inst');
+    if (remember){ try{ localStorage.setItem(INST_KEY, String(Date.now())); }catch(e){} }
+  }
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; showInst(); });
+  window.addEventListener('appinstalled', function(){ deferred = null; hideInst(false); });
+  $('instX').addEventListener('click', function(){ hideInst(true); });
+  $('instBtn').addEventListener('click', function(){
+    if (deferred){
+      deferred.prompt();
+      deferred.userChoice.then(function(){ deferred = null; hideInst(false); }).catch(function(){});
+    } else {
+      var how = isIOS
+        ? 'سفاری میں نیچے شیئر کا نشان (⬆︎) دبائیں، پھر "Add to Home Screen" چنیں۔'
+        : 'براؤزر کے مینو (⋮) میں جا کر "Install app" یا "Add to Home screen" چنیں۔';
+      $('inst').innerHTML = '<div class="ih">'+how+'</div><button class="ix" id="instX2" type="button" aria-label="بند کریں">✕</button>';
+      $('instX2').addEventListener('click', function(){ hideInst(true); });
+    }
+  });
+  // جن براؤزروں میں انسٹال کا اشارہ نہیں آتا (جیسے آئی فون) وہاں بھی بار دکھائیں
+  if (isIOS) showInst();
+  else setTimeout(function(){ if (!deferred && /android/i.test(navigator.userAgent)) showInst(); }, 2500);
+  if ('serviceWorker' in navigator && location.protocol !== 'file:'){ window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
+
+  // ---- Start ----
+  document.documentElement.setAttribute('dir', 'rtl'); document.documentElement.setAttribute('lang', 'ur');
+  loadProducts().then(renderGrid);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "Akoya Online",
+  "short_name": "Akoya",
+  "description": "Akoya Online: فری ہوم ڈیلیوری آل پاکستان، پیمنٹ آن ڈیلیوری",
+  "lang": "ur",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FAF7FC",
+  "theme_color": "#B0245B",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
